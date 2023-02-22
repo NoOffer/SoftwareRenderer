@@ -99,7 +99,7 @@ Window::~Window()
 	DeleteDC(m_DC);
 }
 
-void Window::Draw(unsigned char* framebuffer)
+void Window::Draw(unsigned char const* framebuffer)
 {
 	for (int i = 0; i < m_Height; i++)
 	{

@@ -12,7 +12,7 @@ public:
 	Window(int width, int height, const wchar_t* title);
 	~Window();
 
-	void Draw(unsigned char* framebuffer);
+	void Draw(unsigned char const* framebuffer);
 	void DispatchMsg();
 
 private:
