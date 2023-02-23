@@ -1,6 +1,10 @@
 #pragma once
 
 #include <Windows.h>
+#include <cmath>
+#include <utility>
+
+#include "core.h"
 
 class Renderer
 {
@@ -11,6 +15,8 @@ public:
 	void Draw();
 	unsigned char const* GetFrameBuffer();
 private:
+	void DrawLine(int x0, int y0, int x1, int y1, ColorRGB color);
+
 	int m_Width, m_Height;
-	unsigned char* m_Framebuffer;
+	unsigned char* m_FrameBuffer;
 };

@@ -101,14 +101,15 @@ Window::~Window()
 
 void Window::Draw(unsigned char const* framebuffer)
 {
-	for (int i = 0; i < m_Height; i++)
+	for (int y = 0; y < m_Height; y++)
 	{
-		for (int j = 0; j < m_Width; j++)
+		for (int x = 0; x < m_Width; x++)
 		{
-			int index = (i * m_Width + j) * 3;
-			m_FrameBuffer[index] = framebuffer[index + 2];
-			m_FrameBuffer[index + 1] = framebuffer[index + 1];
-			m_FrameBuffer[index + 2] = framebuffer[index];
+			int srcIndex = (y * m_Width + x) * 3;
+			int dstIndex = ((m_Width - 1 - y) * m_Width + x) * 3;
+			m_FrameBuffer[dstIndex] = framebuffer[srcIndex + 2];
+			m_FrameBuffer[dstIndex + 1] = framebuffer[srcIndex + 1];
+			m_FrameBuffer[dstIndex + 2] = framebuffer[srcIndex];
 		}
 	}
 
