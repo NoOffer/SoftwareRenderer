@@ -4,7 +4,7 @@
 #include <cmath>
 #include <utility>
 
-#include "core.h"
+#include "color.h"
 
 class Renderer
 {

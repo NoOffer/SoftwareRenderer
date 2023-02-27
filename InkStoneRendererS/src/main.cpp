@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "renderer.h"
+#include "core\core.h"
 #include "platforms\win32.h"
 
 const int WIDTH = 500;
