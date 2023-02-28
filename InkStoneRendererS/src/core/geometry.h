@@ -51,6 +51,62 @@ struct vec2
 	}
 };
 
+struct vec2i
+{
+	int x = 0;
+	int y = 0;
+
+	vec2i() : x(0), y(0) {}
+
+	vec2i(int a) : x(a), y(a) {}
+
+	vec2i(int x0, int y0) : x(x0), y(y0) {}
+
+	vec2i(vec2 v) : x((int)v.x), y((int)v.y) {}
+
+	vec2i(const vec2i& v) : x(v.x), y(v.y) {}
+
+	inline vec2i operator+ (vec2i operand)
+	{
+		return vec2i{ x + operand.x, y + operand.y };
+	}
+
+	inline vec2i operator- (vec2i operand)
+	{
+		return vec2i{ x - operand.x, y - operand.y };
+	}
+
+	inline vec2i operator* (vec2i operand)
+	{
+		return vec2i{ x * operand.x, y * operand.y };
+	}
+
+	inline vec2i operator* (int operand)
+	{
+		return vec2i{ x * operand, y * operand };
+	}
+
+	inline vec2 operator* (float operand)
+	{
+		return vec2{ x * operand, y * operand };
+	}
+
+	inline vec2i operator/ (int operand)
+	{
+		return vec2i{ x / operand, y / operand };
+	}
+
+	inline vec2 operator/ (float operand)
+	{
+		return vec2{ x / operand, y / operand };
+	}
+
+	inline vec2i operator% (int operand)
+	{
+		return vec2i{ x % operand , y % operand };
+	}
+};
+
 struct vec3
 {
 	float x = 0;
