@@ -147,15 +147,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\renderer.cpp" />
+    <ClCompile Include="src\core\vector.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\platforms\win32.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\basic.h" />
     <ClInclude Include="src\core\color.h" />
     <ClInclude Include="src\core\core.h" />
-    <ClInclude Include="src\core\geometry.h" />
-    <ClInclude Include="src\core\renderer.h" />
+    <ClInclude Include="src\core\vector.h" />
+    <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\platforms\win32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

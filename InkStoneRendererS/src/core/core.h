@@ -1,5 +1,5 @@
 #pragma once
 
+#include "basic.h"
+#include "vector.h"
 #include "color.h"
-#include "geometry.h"
-#include "renderer.h"
