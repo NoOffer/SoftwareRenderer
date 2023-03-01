@@ -17,11 +17,12 @@ private:
 	void DrawLine(int x0, int y0, int x1, int y1, const ColorRGB& color);
 	void DrawLine(vec2i x, vec2i y, const ColorRGB& color);
 
-	vec3 FindBarycentric(vec2i& a, vec2i& b, vec2i& c, vec2i& p);
-	void DrawTriangle(vec2i a, vec2i b, vec2i c, const ColorRGB& color);
+	vec3 FindBarycentric(const vec3& ab, const vec3& ac, const vec3& pa);
+	void DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color);
 
-	int m_Width, m_Height;
+	int            m_Width, m_Height;
 	unsigned char* m_FrameBuffer;
+	float*         m_ZBuffer;
 
 	int m_CurrentTimeMS;
 	float m_DeltaTime;
