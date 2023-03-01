@@ -17,7 +17,7 @@ int main()
 	std::cout << "Window initialized." << std::endl;
 
 	// Main loop
-	while (1)
+	while (window.IsAlive())
 	{
 		renderer.Draw();
 

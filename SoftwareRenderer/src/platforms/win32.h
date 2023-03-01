@@ -12,6 +12,7 @@ public:
 	Window(int width, int height, const wchar_t* title);
 	~Window();
 
+	bool IsAlive();
 	void Draw(unsigned char const* framebuffer);
 	void DispatchMsg();
 

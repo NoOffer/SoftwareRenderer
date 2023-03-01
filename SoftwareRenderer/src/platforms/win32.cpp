@@ -99,6 +99,11 @@ Window::~Window()
 	DeleteDC(m_DC);
 }
 
+bool Window::IsAlive()
+{
+	return IsWindow(m_Window);
+}
+
 void Window::Draw(unsigned char const* framebuffer)
 {
 	for (int y = 0; y < m_Height; y++)
