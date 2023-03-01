@@ -15,17 +15,17 @@ struct vec2
 
 	vec2(const vec2& v) : x(v.x), y(v.y) {}
 
-	inline vec2 operator+ (vec2 operand)
+	inline vec2 operator+ (const vec2& operand)
 	{
 		return vec2{ x + operand.x, y + operand.y };
 	}
 
-	inline vec2 operator- (vec2 operand)
+	inline vec2 operator- (const vec2& operand)
 	{
 		return vec2{ x - operand.x, y - operand.y };
 	}
 
-	inline vec2 operator* (vec2 operand)
+	inline vec2 operator* (const vec2& operand)
 	{
 		return vec2{ x * operand.x, y * operand.y };
 	}
@@ -35,7 +35,7 @@ struct vec2
 		return vec2{ x * operand, y * operand };
 	}
 
-	inline vec2 operator/ (vec2 operand)
+	inline vec2 operator/ (const vec2& operand)
 	{
 		return vec2{ x / operand.x, y / operand.y };
 	}
@@ -66,17 +66,17 @@ struct vec2i
 
 	vec2i(const vec2i& v) : x(v.x), y(v.y) {}
 
-	inline vec2i operator+ (vec2i operand)
+	inline vec2i operator+ (const vec2i& operand)
 	{
 		return vec2i{ x + operand.x, y + operand.y };
 	}
 
-	inline vec2i operator- (vec2i operand)
+	inline vec2i operator- (const vec2i& operand)
 	{
 		return vec2i{ x - operand.x, y - operand.y };
 	}
 
-	inline vec2i operator* (vec2i operand)
+	inline vec2i operator* (const vec2i& operand)
 	{
 		return vec2i{ x * operand.x, y * operand.y };
 	}
@@ -123,17 +123,17 @@ struct vec3
 
 	vec3(const vec3& v) : x(v.x), y(v.y), z(v.z) {}
 
-	inline vec3 operator+ (vec3 operand)
+	inline vec3 operator+ (const vec3& operand)
 	{
 		return vec3{ x + operand.x, y + operand.y, z + operand.z };
 	}
 
-	inline vec3 operator- (vec3 operand)
+	inline vec3 operator- (const vec3& operand)
 	{
 		return vec3{ x - operand.x, y - operand.y, z - operand.z };
 	}
 
-	inline vec3 operator* (vec3 operand)
+	inline vec3 operator* (const vec3& operand)
 	{
 		return vec3{ x * operand.x, y * operand.y, z * operand.z };
 	}
@@ -143,7 +143,7 @@ struct vec3
 		return vec3{ x * operand, y * operand, z * operand };
 	}
 
-	inline vec3 operator/ (vec3 operand)
+	inline vec3 operator/ (const vec3& operand)
 	{
 		return vec3{ x / operand.x, y / operand.y, z / operand.z };
 	}
@@ -178,17 +178,17 @@ struct vec4
 
 	vec4(const vec4& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
 
-	inline vec4 operator+ (vec4 operand)
+	inline vec4 operator+ (const vec4& operand)
 	{
 		return vec4{ x + operand.x, y + operand.y, z + operand.z, w + operand.w };
 	}
 
-	inline vec4 operator- (vec4 operand)
+	inline vec4 operator- (const vec4& operand)
 	{
 		return vec4{ x - operand.x, y - operand.y, z - operand.z, w - operand.w };
 	}
 
-	inline vec4 operator* (vec4 operand)
+	inline vec4 operator* (const vec4& operand)
 	{
 		return vec4{ x * operand.x, y * operand.y, z * operand.z, w * operand.w };
 	}
@@ -198,7 +198,7 @@ struct vec4
 		return vec4{ x * operand, y * operand, z * operand, w * operand };
 	}
 
-	inline vec4 operator/ (vec4 operand)
+	inline vec4 operator/ (const vec4& operand)
 	{
 		return vec4{ x / operand.x, y / operand.y, z / operand.z, w / operand.w };
 	}
