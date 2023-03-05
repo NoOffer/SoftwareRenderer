@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Renderer::Renderer(int width, int height, float fov, float farDist, float nearDist) : m_Width(width), m_Height(height), m_DeltaTime(0)
+Renderer::Renderer(int width, int height, Camera& cam) : m_Width(width), m_Height(height), m_DeltaTime(0)
 {
 	m_FrameBuffer = (unsigned char*)malloc(sizeof(unsigned char) * width * height * 3);
 	if (m_FrameBuffer) memset(m_FrameBuffer, 0, sizeof(unsigned char) * width * height * 3);
@@ -10,7 +10,7 @@ Renderer::Renderer(int width, int height, float fov, float farDist, float nearDi
 	m_ZBuffer = (float*)malloc(sizeof(float) * width * height);
 	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
 
-	Camera m_Camera(vec2i(width, height), fov, farDist, nearDist);
+	m_Camera = cam;
 
 	m_CurrentTimeMS = clock();
 }
@@ -21,20 +21,19 @@ Renderer::~Renderer()
 	free(m_ZBuffer);
 }
 
-void Renderer::Draw(VertexBuffer vb, float indices[])
+void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
 {
 	mat4 projMatrix = m_Camera.GetProjMatrix();
-	for (int i = 0; i < vb.GetCount(); i += 3)
+	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		DrawTriangle(
-			mul(projMatrix, vb[i]).xyz(),
-			mul(projMatrix, vb[i + 1]).xyz(),
-			mul(projMatrix, vb[i + 2]).xyz(),
-			{240, 240, 255});
+		vec3 n = m_Camera.Project(vb[ib[i]]);
+		std::cout << n.x << " " << n.y << " " << n.z << std::endl;
+		//DrawTriangle(
+		//	mul(projMatrix, vb[ib[i]]).xyz(),
+		//	mul(projMatrix, vb[ib[i + 1]]).xyz(),
+		//	mul(projMatrix, vb[ib[i + 2]]).xyz(),
+		//	{240, 240, 255});
 	}
-
-	DrawTriangle(vec3(10, 10, 0), vec3(390, 490, 1), vec3(490, 390, 1), { 255, 0, 0 });
-	DrawTriangle(vec3(110, 10, 1), vec3(10, 110, 1), vec3(490, 490, 0), { 0, 255, 0 });
 
 	//m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
 	//m_CurrentTimeMS = clock();

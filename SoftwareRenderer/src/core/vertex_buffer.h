@@ -8,11 +8,11 @@ public:
 	VertexBuffer(int count, vec3 vertices[]);
 	~VertexBuffer();
 
-	inline vec4 operator[](int i) { return m_Vertices[i]; }
+	inline vec3 operator[](int i) { return m_Vertices[i]; }
 	inline int GetCount() { return m_Count; }
 
 private:
-	vec4* m_Vertices;
 	int m_Count;
+	vec3* m_Vertices;
 };
 

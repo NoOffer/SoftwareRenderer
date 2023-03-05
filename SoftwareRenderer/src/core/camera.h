@@ -12,12 +12,18 @@ public:
 	{
 	}
 
+	inline Camera(int resolutionW, int resolutionH, float fov, float farDist, float nearDist)
+		: m_Resolution(vec2i(resolutionW, resolutionH)), m_FOV(fov), m_Far(farDist), m_Near(nearDist)
+	{
+	}
+
 	inline Camera(vec2i resolution, float fov, float farDist, float nearDist)
 		: m_Resolution(resolution), m_FOV(fov), m_Far(farDist), m_Near(nearDist)
 	{
 	}
 
 	mat4 GetProjMatrix();
+	vec3 Project(vec3 v);
 
 private:
 	vec2i m_Resolution;
