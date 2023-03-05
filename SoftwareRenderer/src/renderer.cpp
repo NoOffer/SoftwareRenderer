@@ -18,6 +18,7 @@ Renderer::Renderer(int width, int height, float fov, float farDist, float nearDi
 Renderer::~Renderer()
 {
 	free(m_FrameBuffer);
+	free(m_ZBuffer);
 }
 
 void Renderer::Draw(VertexBuffer vb, float indices[])
