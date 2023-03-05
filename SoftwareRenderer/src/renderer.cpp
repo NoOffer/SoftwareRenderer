@@ -2,13 +2,15 @@
 
 #include <iostream>
 
-Renderer::Renderer(int width, int height) : m_Width(width), m_Height(height), m_DeltaTime(0)
+Renderer::Renderer(int width, int height, float fov, float farDist, float nearDist) : m_Width(width), m_Height(height), m_DeltaTime(0)
 {
 	m_FrameBuffer = (unsigned char*)malloc(sizeof(unsigned char) * width * height * 3);
 	if (m_FrameBuffer) memset(m_FrameBuffer, 0, sizeof(unsigned char) * width * height * 3);
 
 	m_ZBuffer = (float*)malloc(sizeof(float) * width * height);
 	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
+
+	Camera m_Camera(vec2i(width, height), fov, farDist, nearDist);
 
 	m_CurrentTimeMS = clock();
 }
@@ -18,12 +20,17 @@ Renderer::~Renderer()
 	free(m_FrameBuffer);
 }
 
-void Renderer::Draw()
+void Renderer::Draw(VertexBuffer vb, float indices[])
 {
-	DrawLine(10, 10, 490, 10, { 255, 255, 255 });
-	DrawLine(10, 10, 10, 490, { 255, 255, 255 });
-	DrawLine(10, 490, 490, 490, { 255, 255, 255 });
-	DrawLine(490, 10, 490, 490, { 255, 255, 255 });
+	mat4 projMatrix = m_Camera.GetProjMatrix();
+	for (int i = 0; i < vb.GetCount(); i += 3)
+	{
+		DrawTriangle(
+			mul(projMatrix, vb[i]).xyz(),
+			mul(projMatrix, vb[i + 1]).xyz(),
+			mul(projMatrix, vb[i + 2]).xyz(),
+			{240, 240, 255});
+	}
 
 	DrawTriangle(vec3(10, 10, 0), vec3(390, 490, 1), vec3(490, 390, 1), { 255, 0, 0 });
 	DrawTriangle(vec3(110, 10, 1), vec3(10, 110, 1), vec3(490, 490, 0), { 0, 255, 0 });

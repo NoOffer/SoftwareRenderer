@@ -8,10 +8,10 @@
 class Renderer
 {
 public:
-	Renderer(int width, int height);
+	Renderer(int width, int height, float fov, float farDist, float nearDist);
 	~Renderer();
 
-	void Draw();
+	void Draw(VertexBuffer vb, float indices[]);
 	unsigned char const* GetFrameBuffer();
 private:
 	void DrawLine(int x0, int y0, int x1, int y1, const ColorRGB& color);
@@ -24,6 +24,8 @@ private:
 	unsigned char* m_FrameBuffer;
 	float*         m_ZBuffer;
 
-	int m_CurrentTimeMS;
-	float m_DeltaTime;
+	Camera		   m_Camera;
+
+	int            m_CurrentTimeMS;
+	float          m_DeltaTime;
 };
