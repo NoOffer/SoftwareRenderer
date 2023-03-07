@@ -19,10 +19,10 @@ mat4 Camera::GetProjMatrix()
 
 vec3 Camera::Project(vec3 v)
 {
-	float n = (2 * std::tan(m_FOV / 2));
+	float n = (2 * std::tan(m_FOV * 11 / 1260)) * v.z;
 
-	v.x = (v.x / (n * v.z / m_Resolution.y * m_Resolution.x) + 0.5f) * m_Resolution.x;
-	v.y = (v.y / (n * v.z) + 0.5f) * m_Resolution.y;
+	v.x = (v.x / (n / m_Resolution.y * m_Resolution.x) + 0.5f) * m_Resolution.x;
+	v.y = (v.y / n + 0.5f) * m_Resolution.y;
 	v.z = (v.z - m_Near) / (m_Far - m_Near);
 
 	return v;

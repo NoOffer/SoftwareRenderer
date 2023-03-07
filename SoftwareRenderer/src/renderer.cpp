@@ -23,22 +23,23 @@ Renderer::~Renderer()
 
 void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
 {
+	//memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
+	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
+
 	mat4 projMatrix = m_Camera.GetProjMatrix();
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		vec3 n = m_Camera.Project(vb[ib[i]]);
-		std::cout << n.x << " " << n.y << " " << n.z << std::endl;
-		//DrawTriangle(
-		//	mul(projMatrix, vb[ib[i]]).xyz(),
-		//	mul(projMatrix, vb[ib[i + 1]]).xyz(),
-		//	mul(projMatrix, vb[ib[i + 2]]).xyz(),
-		//	{240, 240, 255});
+		DrawTriangle(
+			m_Camera.Project(vb[ib[i]]),
+			m_Camera.Project(vb[ib[i + 1]]),
+			m_Camera.Project(vb[ib[i + 2]]),
+			{ 240, 240, 255 });
 	}
 
-	//m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
-	//m_CurrentTimeMS = clock();
+	m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
+	m_CurrentTimeMS = clock();
 
-	//std::cout << 1 / m_DeltaTime << std::endl;
+	std::cout << 1 / m_DeltaTime << std::endl;
 }
 
 unsigned char const* Renderer::GetFrameBuffer()
@@ -107,7 +108,8 @@ void Renderer::DrawLine(vec2i x, vec2i y, const ColorRGB& color)
 vec3 Renderer::FindBarycentric(const vec3& ab, const vec3& ac, const vec3& pa)
 {
 	vec3 u = cross(vec3(ab.y, ac.y, pa.y), vec3(ab.x, ac.x, pa.x));
-	if (u.z < 1) return vec3(-1, -1, -1);
+	//if (u.z < 1) return vec3(-1, -1, -1);
+	if (u.z < 1) u = -u;
 	return vec3(1.0f - (u.x + u.y) / u.z, u.x / u.z, u.y / u.z);
 }
 

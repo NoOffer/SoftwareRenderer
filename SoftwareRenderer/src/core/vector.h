@@ -20,6 +20,11 @@ struct vec2
 		return vec2{ x + operand.x, y + operand.y };
 	}
 
+	inline vec2 operator- ()
+	{
+		return vec2{ -x, -y };
+	}
+
 	inline vec2 operator- (const vec2& operand)
 	{
 		return vec2{ x - operand.x, y - operand.y };
@@ -69,6 +74,11 @@ struct vec2i
 	inline vec2i operator+ (const vec2i& operand)
 	{
 		return vec2i{ x + operand.x, y + operand.y };
+	}
+
+	inline vec2i operator- ()
+	{
+		return vec2i{ -x, -y };
 	}
 
 	inline vec2i operator- (const vec2i& operand)
@@ -128,6 +138,11 @@ struct vec3
 		return vec3{ x + operand.x, y + operand.y, z + operand.z };
 	}
 
+	inline vec3 operator- ()
+	{
+		return vec3{ -x, -y, -z };
+	}
+
 	inline vec3 operator- (const vec3& operand)
 	{
 		return vec3{ x - operand.x, y - operand.y, z - operand.z };
@@ -181,6 +196,11 @@ struct vec4
 	inline vec4 operator+ (const vec4& operand)
 	{
 		return vec4{ x + operand.x, y + operand.y, z + operand.z, w + operand.w };
+	}
+
+	inline vec4 operator- ()
+	{
+		return vec4{ -x, -y, -z, -w };
 	}
 
 	inline vec4 operator- (const vec4& operand)
