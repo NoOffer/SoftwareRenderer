@@ -11,7 +11,7 @@ Renderer::Renderer(int width, int height, Camera& cam) : m_Width(width), m_Heigh
 	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
 
 	m_Camera = cam;
-	m_Camera.position = vec3(1.0f, 1.0f, -1.0f);
+	m_Camera.position = vec3(0.5f, 0.0f, -5.0f);
 
 	m_CurrentTimeMS = clock();
 }
@@ -29,6 +29,7 @@ void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
 
 	//mat4 projMatrix = m_Camera.GetProjMatrix();
 	mat4 viewMatrix = m_Camera.GetViewMatrix();
+
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
 		DrawTriangle(

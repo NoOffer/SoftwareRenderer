@@ -22,12 +22,22 @@ vec2 normalize(vec2 v)
 
 vec3 normalize(vec3 v)
 {
-	return v / length(v);
+	float l = length(v);
+	if (l)
+	{
+		return v / l;
+	}
+	return vec3();
 }
 
 vec4 normalize(vec4 v)
 {
-	return v / length(v);
+	float l = length(v);
+	if (l)
+	{
+		return v / l;
+	}
+	return vec4();
 }
 
 float dot(vec2 v1, vec2 v2)

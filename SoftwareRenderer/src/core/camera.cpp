@@ -1,5 +1,7 @@
 #include "camera.h"
 
+#include <iostream>
+
 mat4 Camera::GetViewMatrix()
 {
 	vec3 z = normalize(vec3(0.0f, 0.0f, 0.0f) - position);
@@ -7,7 +9,7 @@ mat4 Camera::GetViewMatrix()
 	vec3 y = normalize(cross(z, x));
 
 	mat4 Minv(1.0f);
-	mat4 Tr(1.0f);
+	//mat4 Tr(1.0f);
 
 	Minv[0][0] = x.x;
 	Minv[0][1] = x.y;
@@ -18,11 +20,15 @@ mat4 Camera::GetViewMatrix()
 	Minv[2][0] = z.x;
 	Minv[2][1] = z.y;
 	Minv[2][2] = z.z;
-	Tr[0][3] = -position.x;
-	Tr[1][3] = -position.y;
-	Tr[2][3] = -position.z;
+	Minv[0][3] = position.x;
+	Minv[1][3] = position.y;
+	Minv[2][3] = position.z;
+	//Tr[0][3] = -position.x;
+	//Tr[1][3] = -position.y;
+	//Tr[2][3] = -position.z;
 
-	m_ViewMatrix = mul(Minv, Tr);
+	//m_ViewMatrix = mul(Minv, Tr);
+	m_ViewMatrix = Minv;
 
 	return m_ViewMatrix;
 }
