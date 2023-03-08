@@ -11,6 +11,7 @@ Renderer::Renderer(int width, int height, Camera& cam) : m_Width(width), m_Heigh
 	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
 
 	m_Camera = cam;
+	m_Camera.position = vec3(1.0f, 1.0f, -1.0f);
 
 	m_CurrentTimeMS = clock();
 }
@@ -26,20 +27,22 @@ void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
 	//memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
 	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
 
-	mat4 projMatrix = m_Camera.GetProjMatrix();
+	//mat4 projMatrix = m_Camera.GetProjMatrix();
+	mat4 viewMatrix = m_Camera.GetViewMatrix();
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
 		DrawTriangle(
-			m_Camera.Project(vb[ib[i]]),
-			m_Camera.Project(vb[ib[i + 1]]),
-			m_Camera.Project(vb[ib[i + 2]]),
+			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
+			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
+			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
 			{ 240, 240, 255 });
 	}
 
+	// Time
 	m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
 	m_CurrentTimeMS = clock();
 
-	std::cout << 1 / m_DeltaTime << std::endl;
+	//std::cout << 1 / m_DeltaTime << std::endl;
 }
 
 unsigned char const* Renderer::GetFrameBuffer()

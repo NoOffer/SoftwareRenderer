@@ -22,13 +22,18 @@ public:
 	{
 	}
 
+	mat4 GetViewMatrix();
+
 	mat4 GetProjMatrix();
-	vec3 Project(vec3 v);
+	vec4 Project(vec4 v);
+
+	vec3 position;
 
 private:
 	vec2i m_Resolution;
 	float m_FOV, m_Far, m_Near;
 
+	mat4 m_ViewMatrix;
 	mat4 m_ProjMatrix;
 };
 
