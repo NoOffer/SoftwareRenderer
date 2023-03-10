@@ -11,7 +11,7 @@ public:
 	Renderer(int width, int height, Camera& cam);
 	~Renderer();
 
-	void Draw(VertexBuffer& vb, IndexBuffer& ib);
+	void Draw(Model& model);
 	unsigned char const* GetFrameBuffer();
 private:
 	void DrawLine(int x0, int y0, int x1, int y1, const ColorRGB& color);

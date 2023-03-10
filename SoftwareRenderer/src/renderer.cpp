@@ -22,7 +22,7 @@ Renderer::~Renderer()
 	free(m_ZBuffer);
 }
 
-void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
+void Renderer::Draw(Model& model)
 {
 	//memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
 	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
@@ -30,6 +30,8 @@ void Renderer::Draw(VertexBuffer& vb, IndexBuffer& ib)
 	//mat4 projMatrix = m_Camera.GetProjMatrix();
 	mat4 viewMatrix = m_Camera.GetViewMatrix();
 
+	VertexBuffer& vb = model.GetVertexBuffer();
+	IndexBuffer& ib = model.GetIndexBuffer();
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
 		DrawTriangle(

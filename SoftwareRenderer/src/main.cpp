@@ -21,11 +21,12 @@ int main()
 	// Vertex buffer
 	VertexBuffer vb(3, new vec3[3]{ vec3(-10, -10, 50), vec3(10, -10, 50), vec3(0, 10, 80) });
 	IndexBuffer ib(3, new float[3]{ 0, 1, 2 });
+	Model model(vb, ib);
 
 	// Main loop
 	while (window.IsAlive())
 	{
-		renderer.Draw(vb, ib);
+		renderer.Draw(model);
 
 		window.DispatchMsg();
 		window.Draw(renderer.GetFrameBuffer());
