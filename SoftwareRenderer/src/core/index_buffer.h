@@ -5,7 +5,8 @@
 class IndexBuffer
 {
 public:
-	IndexBuffer(int count, float indices[]);
+	IndexBuffer();
+	IndexBuffer(int count, int indices[]);
 	~IndexBuffer();
 
 	inline int GetCount() { return m_Count; }
@@ -13,6 +14,6 @@ public:
 
 private:
 	int m_Count;
-	float* m_Indices;
+	int* m_Indices;
 };
 

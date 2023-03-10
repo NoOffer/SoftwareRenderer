@@ -5,6 +5,7 @@
 class VertexBuffer
 {
 public:
+	VertexBuffer();
 	VertexBuffer(int count, vec3 vertices[]);
 	~VertexBuffer();
 
