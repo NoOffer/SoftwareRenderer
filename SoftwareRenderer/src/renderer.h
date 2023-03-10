@@ -11,6 +11,7 @@ public:
 	Renderer(int width, int height, Camera& cam);
 	~Renderer();
 
+	void ClearBuffer();
 	void Draw(Model& model);
 	unsigned char const* GetFrameBuffer();
 private:

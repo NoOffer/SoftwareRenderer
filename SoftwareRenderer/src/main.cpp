@@ -27,6 +27,7 @@ int main()
 	while (window.IsAlive())
 	{
 		renderer.Draw(model);
+		renderer.ClearBuffer();
 
 		window.DispatchMsg();
 		window.Draw(renderer.GetFrameBuffer());
