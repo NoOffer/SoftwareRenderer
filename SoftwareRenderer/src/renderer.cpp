@@ -23,7 +23,7 @@ Renderer::~Renderer()
 
 void Renderer::ClearBuffer()
 {
-	//memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
+	memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
 	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
 }
 
