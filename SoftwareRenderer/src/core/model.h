@@ -9,7 +9,7 @@ class Model
 {
 public:
 	Model(const char* name, int vertCount, vec3* vertices, int idxCount, int* indices);
-	~Model() {}
+	~Model();
 
 	inline VertexBuffer& GetVertexBuffer() { return m_VB; }
 	inline IndexBuffer& GetIndexBuffer() { return m_IB; }

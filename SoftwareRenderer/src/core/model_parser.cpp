@@ -1,55 +1,72 @@
 #include "model_parser.h"
 
-Model* ObjParser::Parse(const char* filepath)
+void ObjParser::Parse(const char* filepath, std::vector<Model*>& models)
 {
-	std::vector<Model> models;
-
-	std::string name = "";
-	std::vector<vec3> vertices;
-	std::vector<int> indices;
-	int vertCount = 0, idxCount = 0;
-
 	std::ifstream file(filepath, std::ios::in);
 
-	std::string line;
-
-	while (std::getline(file, line))
+	if (file)
 	{
-		std::istringstream iss(line);
+		std::string name = "";
+		std::vector<vec3> vertices;
+		std::vector<int> indices;
+		int vertCount = 0, idxCount = 0, modelCount = 0;
 
-		std::string element;
+		std::string line;
 
-		iss >> element;
-
-		if (element == "o")
+		while (std::getline(file, line))
 		{
-			if (vertCount > 0)
+			std::istringstream iss(line);
+
+			std::string element;
+
+			iss >> element;
+
+			if (element == "o")
 			{
-				/*
-				CAUTION: Possible memory leak
-				*/
-				models.push_back(Model(name.c_str(), vertCount, &vertices[0], idxCount, &indices[0]));
-			}
+				if (vertCount > 0)
+				{
+					/*
+					CAUTION: Possible memory leak
+					*/
+					models.push_back(new Model(name.c_str(), vertCount, vertices.data(), idxCount, indices.data()));
+					vertices.clear();
+					vertCount = 0;
+					indices.clear();
+					idxCount = 0;
+				}
 
-			iss >> name;
+				iss >> name;
+			}
+			else if (element == "v")
+			{
+				float a, b, c;
+				iss >> a >> b >> c;
+				vertices.push_back(vec3(a, b, c));
+				vertCount++;
+				//std::cout << "v " << a << " " << b << " " << c << std::endl;
+			}
+			else if (element == "f")
+			{
+				int a, b, c;
+				iss >> a >> b >> c;
+				indices.push_back(a);
+				indices.push_back(b);
+				indices.push_back(c);
+				idxCount += 3;
+				//std::cout << "f " << a << " " << b << " " << c << std::endl;
+			}
 		}
-		else if (element == "v")
+
+		if (vertCount > 0)
 		{
-			float a, b, c;
-			iss >> a >> b >> c;
-			vertices.push_back(vec3(a, b, c));
-			vertCount++;
-		}
-		else if (element == "f")
-		{
-			int a, b, c;
-			iss >> a >> b >> c;
-			indices.push_back(a);
-			indices.push_back(b);
-			indices.push_back(c);
-			idxCount += 3;
+			/*
+			CAUTION: Possible memory leak
+			*/
+			models.push_back(new Model(name.c_str(), vertCount, vertices.data(), idxCount, indices.data()));
 		}
 	}
-
-	return &models[0];
+	else
+	{
+		throw "[Fatal] Failed To Open File";
+	}
 }

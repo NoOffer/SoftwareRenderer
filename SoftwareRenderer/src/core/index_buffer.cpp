@@ -1,10 +1,5 @@
 #include "index_buffer.h"
 
-IndexBuffer::IndexBuffer() : m_Count(0)
-{
-	m_Indices = nullptr;
-}
-
 IndexBuffer::IndexBuffer(int count, int indices[]) : m_Count(count)
 {
 	if (count % 3)
@@ -12,7 +7,12 @@ IndexBuffer::IndexBuffer(int count, int indices[]) : m_Count(count)
 		count -= count % 3;
 	}
 
-	m_Indices = &indices[0];
+
+	m_Indices = (int*)malloc(sizeof(int) * count);
+	if (m_Indices) for (int i = 0; i < count; i++)
+	{
+		m_Indices[i] = indices[i] - 1;
+	}
 }
 
 IndexBuffer::~IndexBuffer()

@@ -11,6 +11,7 @@ int main()
 {
 	// Create camera
 	Camera cam((int)WIDTH, (int)HEIGHT, 60, 100.0f, 0.1f);
+	cam.position = vec3(1.0f, 1.0f, -5.0f);
 	// Create renderer
 	Renderer renderer(WIDTH, HEIGHT, cam);
 
@@ -18,16 +19,26 @@ int main()
 	Window window(500, 500, L"Test Window");
 	std::cout << "Window initialized." << std::endl;
 
-	// Vertex buffer
-	VertexBuffer vb(3, new vec3[3]{ vec3(-10, -10, 50), vec3(10, -10, 50), vec3(0, 10, 80) });
-	IndexBuffer ib(3, new float[3]{ 0, 1, 2 });
-	Model model(vb, ib);
+	std::vector<Model*> models;
+	ObjParser::Parse("res/test_model.obj", models);
+
+	Model testModel(
+		"Test Model",
+		3,
+		new vec3[3] { vec3(-1.0f, -1.0f, 10.0f), vec3(1.0f, -1.0f, 10.0f), vec3(0.0f, 1.0f, 20.0f) },
+		3,
+		new int[3] { 0, 1, 2 });
 
 	// Main loop
 	while (window.IsAlive())
 	{
-		renderer.Draw(model);
 		renderer.ClearBuffer();
+
+		//renderer.Draw(testModel);
+		for (Model* model : models)
+		{
+			renderer.Draw(*model);
+		}
 
 		window.DispatchMsg();
 		window.Draw(renderer.GetFrameBuffer());

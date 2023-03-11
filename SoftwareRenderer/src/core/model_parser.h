@@ -10,7 +10,7 @@
 class ObjParser
 {
 public:
-	static Model* Parse(const char* filepath);
+	static void Parse(const char* filepath, std::vector<Model*>& models);
 
 private:
 	ObjParser() {}

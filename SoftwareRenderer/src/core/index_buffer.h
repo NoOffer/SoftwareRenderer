@@ -1,11 +1,10 @@
 #pragma once
 
-#include <windows.h>
+#include <Windows.h>
 
 class IndexBuffer
 {
 public:
-	IndexBuffer();
 	IndexBuffer(int count, int indices[]);
 	~IndexBuffer();
 

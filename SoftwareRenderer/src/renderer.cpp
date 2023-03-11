@@ -34,9 +34,9 @@ void Renderer::Draw(Model& model)
 
 	VertexBuffer& vb = model.GetVertexBuffer();
 	IndexBuffer& ib = model.GetIndexBuffer();
+
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		vec3 a(vb[ib[i]]);
 		DrawTriangle(
 			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
 			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
