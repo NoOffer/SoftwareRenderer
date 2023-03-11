@@ -148,7 +148,7 @@ void Renderer::DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color)
 			{
 				int idx = (p.y * m_Width + p.x);
 				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;
-				if (p.z < m_ZBuffer[idx])  // Z test
+				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
 				{
 					m_ZBuffer[idx] = p.z;
 
