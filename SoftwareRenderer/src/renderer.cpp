@@ -2,15 +2,13 @@
 
 #include <iostream>
 
-Renderer::Renderer(int width, int height, Camera& cam) : m_Width(width), m_Height(height), m_DeltaTime(0)
+Renderer::Renderer(int width, int height, Camera* cam) : m_Width(width), m_Height(height), m_Camera(cam), m_DeltaTime(0)
 {
 	m_FrameBuffer = (unsigned char*)malloc(sizeof(unsigned char) * width * height * 3);
 	if (m_FrameBuffer) memset(m_FrameBuffer, 0, sizeof(unsigned char) * width * height * 3);
 
 	m_ZBuffer = (float*)malloc(sizeof(float) * width * height);
 	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
-
-	m_Camera = cam;
 
 	m_CurrentTimeMS = clock();
 }
@@ -29,8 +27,8 @@ void Renderer::ClearBuffer()
 
 void Renderer::Draw(Model& model)
 {
-	//mat4 projMatrix = m_Camera.GetProjMatrix();
-	mat4 viewMatrix = m_Camera.GetViewMatrix();
+	//mat4 projMatrix = (*m_Camera).GetProjMatrix();
+	mat4 viewMatrix = (*m_Camera).GetViewMatrix();
 
 	VertexBuffer& vb = model.GetVertexBuffer();
 	IndexBuffer& ib = model.GetIndexBuffer();
@@ -38,9 +36,9 @@ void Renderer::Draw(Model& model)
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
 		DrawTriangle(
-			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
-			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
-			m_Camera.Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
+			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
+			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
+			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
 			{ 240, 240, 255 });
 	}
 

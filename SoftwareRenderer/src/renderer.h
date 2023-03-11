@@ -8,7 +8,7 @@
 class Renderer
 {
 public:
-	Renderer(int width, int height, Camera& cam);
+	Renderer(int width, int height, Camera* cam);
 	~Renderer();
 
 	void ClearBuffer();
@@ -25,7 +25,7 @@ private:
 	unsigned char* m_FrameBuffer;
 	float*         m_ZBuffer;
 
-	Camera		   m_Camera;
+	Camera*		   m_Camera;
 
 	int            m_CurrentTimeMS;
 	float          m_DeltaTime;
