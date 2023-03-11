@@ -13,7 +13,7 @@ struct mat4
 
 	inline float* operator[](int i)
 	{
-		return m_Mat[i];
+		return &(m_Mat[i][0]);
 	}
 
 	mat4 Transpose();
@@ -22,3 +22,5 @@ struct mat4
 vec4 mul(mat4& mat, vec4 vec);
 
 mat4 mul(mat4& m1, mat4& m2);
+
+std::ostream& operator<<(std::ostream& ostr, mat4& m);

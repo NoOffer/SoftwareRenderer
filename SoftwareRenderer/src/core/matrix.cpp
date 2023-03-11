@@ -13,7 +13,13 @@ mat4::mat4()
 
 mat4::mat4(float a)
 {
-	mat4();
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			m_Mat[i][j] = 0.0f;
+		}
+	}
 	m_Mat[0][0] = a;
 	m_Mat[1][1] = a;
 	m_Mat[2][2] = a;
@@ -56,4 +62,17 @@ mat4 mul(mat4& m1, mat4& m2)
 		}
 	}
 	return res;
+}
+
+std::ostream& operator<<(std::ostream& ostr, mat4& m)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			ostr << m[i][j] << " ";
+		}
+		ostr << std::endl;
+	}
+	return ostr;
 }
