@@ -35,6 +35,12 @@ void Renderer::Draw(Model& model)
 
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
+		//vec3 a = mul(viewMatrix, vec4(vb[ib[i]], 1.0f)).xyz();
+		//vec3 b = mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f)).xyz();
+		//vec3 c = mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f)).xyz();
+
+		//std::cout << a << std::endl << b << std::endl << c << std::endl;
+
 		DrawTriangle(
 			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
 			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
