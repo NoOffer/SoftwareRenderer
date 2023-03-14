@@ -27,7 +27,7 @@ void Renderer::ClearBuffer()
 
 void Renderer::Draw(Model& model)
 {
-	//mat4 projMatrix = (*m_Camera).GetProjMatrix();
+	mat4 projMatrix = (*m_Camera).GetProjMatrix();
 	mat4 viewMatrix = (*m_Camera).GetViewMatrix();
 
 	VertexBuffer& vb = model.GetVertexBuffer();
@@ -35,18 +35,20 @@ void Renderer::Draw(Model& model)
 
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		//vec3 a = mul(viewMatrix, vec4(vb[ib[i]], 1.0f)).xyz();
-		//vec3 b = mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f)).xyz();
-		//vec3 c = mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f)).xyz();
+		//DrawTriangle(
+		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
+		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
+		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
+		//	{ 240, 240, 255 });
 
-		//std::cout << a << std::endl << b << std::endl << c << std::endl;
-
-		DrawTriangle(
-			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
-			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
-			(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
-			{ 240, 240, 255 });
+		vec4 a = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i]], 1.0f)));
+		vec4 b = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f)));
+		vec4 c = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f)));
+		DrawTriangle((a / std::abs(a.w)).xyz(), (b / std::abs(b.w)).xyz(), (c / std::abs(c.w)).xyz(), { 240, 240, 255 });
 	}
+
+	DrawLine(vec2i(0, 0), vec2i(m_Width - 1, 0), { 255, 0, 0 });
+	DrawLine(vec2i(m_Width - 1, 0), vec2i(m_Width - 1, m_Height - 1), { 255, 0, 0 });
 
 	// Time
 	m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
@@ -122,7 +124,7 @@ vec3 Renderer::FindBarycentric(const vec3& ab, const vec3& ac, const vec3& pa)
 {
 	vec3 u = cross(vec3(ab.y, ac.y, pa.y), vec3(ab.x, ac.x, pa.x));
 	//if (u.z < 1) return vec3(-1, -1, -1);
-	if (u.z < 1) u = -u;
+	if (std::abs(u.z) < 1) return vec3(-1.0f, -1.0f, -1.0f);
 	return vec3(1.0f - (u.x + u.y) / u.z, u.x / u.z, u.y / u.z);
 }
 
@@ -149,8 +151,11 @@ void Renderer::DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color)
 		for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
 		{
 			vec3 barycentric = FindBarycentric(ab, ac, a - p);
+
+			//std::cout << p << std::endl;
+			//std::cout << barycentric << std::endl;
 			//if (barycentric.x + barycentric.y <= 1)
-			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0 || barycentric.y + barycentric.z > 1))
+			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))
 			{
 				int idx = (p.y * m_Width + p.x);
 				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;

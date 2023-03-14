@@ -134,6 +134,11 @@ struct vec3
 
 	inline vec3(const vec3& v) : x(v.x), y(v.y), z(v.z) {}
 
+	inline vec3 operator+ (float operand)
+	{
+		return vec3{ x + operand, y + operand, z + operand };
+	}
+
 	inline vec3 operator+ (const vec3& operand)
 	{
 		return vec3{ x + operand.x, y + operand.y, z + operand.z };
@@ -251,6 +256,11 @@ struct vec4
 
 	inline vec4(const vec4& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
 
+	inline vec4 operator+ (float operand)
+	{
+		return vec4{ x + operand, y + operand, z + operand, w + operand };
+	}
+
 	inline vec4 operator+ (const vec4& operand)
 	{
 		return vec4{ x + operand.x, y + operand.y, z + operand.z, w + operand.w };
@@ -328,5 +338,12 @@ inline std::ostream& operator<<(std::ostream& ostr, vec3 const& v)
 {
 
 	ostr << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return ostr;
+}
+
+inline std::ostream& operator<<(std::ostream& ostr, vec4 const& v)
+{
+
+	ostr << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
 	return ostr;
 }

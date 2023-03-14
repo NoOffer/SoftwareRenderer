@@ -38,21 +38,21 @@ mat4 Camera::GetViewMatrix()
 	return m_ViewMatrix;
 }
 
-// Retrun: X' valid in [-W', W'], Y' valid in [-W', W'], Z' valid in [0, 1], W' = Z
+// Retrun: X' valid in [-W', W'], Y' valid in [-W', W'], Z' valid in [-W', W'], W' = Z
 mat4 Camera::GetProjMatrix()
 {
 	if (!m_ProjMatrixAvailable)
 	{
-		mat4 m_ProjMatrix;
+		m_ProjMatrix = mat4(0.0f);
 
-		float n = 1 / (2 * std::tan(m_FOV / 2));
-		m_ProjMatrix[0][0] = n * m_Resolution.y / m_Resolution.x;
-		m_ProjMatrix[0][2] = 0.5f;
+		float n = m_Resolution.y / (2 * std::tan(m_FOV * 11 / 1260));
+		m_ProjMatrix[0][0] = n;
+		m_ProjMatrix[0][2] = 0.5f * m_Resolution.x;
 		m_ProjMatrix[1][1] = n;
-		m_ProjMatrix[1][2] = 0.5f;
-		m_ProjMatrix[2][2] = 1 / (m_Far - m_Near);
-		m_ProjMatrix[2][3] = -m_Near / (m_Far - m_Near);
-		m_ProjMatrix[3][2] = 1;
+		m_ProjMatrix[1][2] = 0.5f * m_Resolution.y;
+		m_ProjMatrix[2][2] = (m_Far + m_Near) / (m_Far - m_Near);
+		m_ProjMatrix[2][3] = 2 * m_Far * m_Near / (m_Far - m_Near);
+		m_ProjMatrix[3][2] = 1.0f;
 
 		m_ProjMatrixAvailable = true;
 	}
@@ -62,7 +62,7 @@ mat4 Camera::GetProjMatrix()
 
 vec4 Camera::Project(vec4 v)
 {
-	float n = (2 * std::tan(m_FOV * 11 / 1260)) * v.z;
+	float n = (2 * std::tan(m_FOV * 11 / 1260)) * std::abs(v.z);
 
 	v.x = (v.x / (n / m_Resolution.y * m_Resolution.x) + 0.5f) * m_Resolution.x;
 	v.y = (v.y / n + 0.5f) * m_Resolution.y;

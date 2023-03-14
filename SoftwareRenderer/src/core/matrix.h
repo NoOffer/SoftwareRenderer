@@ -19,8 +19,8 @@ struct mat4
 	mat4 Transpose();
 };
 
-vec4 mul(mat4& mat, vec4 vec);
+vec4 mul(mat4 mat, vec4 vec);
 
-mat4 mul(mat4& m1, mat4& m2);
+mat4 mul(mat4 m1, mat4 m2);
 
 std::ostream& operator<<(std::ostream& ostr, mat4& m);

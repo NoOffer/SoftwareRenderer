@@ -40,7 +40,7 @@ mat4 mat4::Transpose()
 	return res;
 }
 
-vec4 mul(mat4& mat, vec4 vec)
+vec4 mul(mat4 mat, vec4 vec)
 {
 	vec4 res;
 	res.x = mat[0][0] * vec.x + mat[0][1] * vec.y + mat[0][2] * vec.z + mat[0][3] * vec.w;
@@ -50,7 +50,7 @@ vec4 mul(mat4& mat, vec4 vec)
 	return res;
 }
 
-mat4 mul(mat4& m1, mat4& m2)
+mat4 mul(mat4 m1, mat4 m2)
 {
 	mat4 res;
 	for (int i = 0; i < 4; i++)

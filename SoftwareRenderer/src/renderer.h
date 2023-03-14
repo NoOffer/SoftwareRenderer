@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "core/core.h"
+#include "shader/blinn_phong.h"
 
 class Renderer
 {
