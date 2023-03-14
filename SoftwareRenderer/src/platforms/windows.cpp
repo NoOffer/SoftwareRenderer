@@ -1,4 +1,4 @@
-#include "win32.h"
+#include "windows.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -111,7 +111,7 @@ void Window::Draw(unsigned char const* framebuffer)
 		for (int x = 0; x < m_Width; x++)
 		{
 			int srcIndex = (y * m_Width + x) * 3;
-			int dstIndex = ((m_Width - 1 - y) * m_Width + x) * 3;
+			int dstIndex = ((m_Height - 1 - y) * m_Width + x) * 3;
 			m_FrameBuffer[dstIndex] = framebuffer[srcIndex + 2];
 			m_FrameBuffer[dstIndex + 1] = framebuffer[srcIndex + 1];
 			m_FrameBuffer[dstIndex + 2] = framebuffer[srcIndex];
