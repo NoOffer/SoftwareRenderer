@@ -25,6 +25,44 @@ void Renderer::ClearBuffer()
 	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
 }
 
+//void Renderer::Draw(Model& model)
+//{
+//	mat4 viewMatrix = (*m_Camera).GetViewMatrix();
+//	mat4 projMatrix = (*m_Camera).GetProjMatrix();
+//
+//	VertexBuffer& vb = model.GetVertexBuffer();
+//	IndexBuffer& ib = model.GetIndexBuffer();
+//
+//	for (int i = 0; i < ib.GetCount(); i += 3)
+//	{
+//		//DrawTriangle(
+//		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
+//		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
+//		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
+//		//	{ 240, 240, 255 });
+//
+//		vec4 a = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i]], 1.0f)));
+//		vec4 b = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f)));
+//		vec4 c = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f)));
+//		a.x /= std::abs(a.w);
+//		a.y /= std::abs(a.w);
+//		b.x /= std::abs(b.w);
+//		b.y /= std::abs(b.w);
+//		c.x /= std::abs(c.w);
+//		c.y /= std::abs(c.w);
+//		DrawTriangle(a.xyz(), b.xyz(), c.xyz(), { 240, 240, 255 });
+//	}
+//
+//	DrawLine(vec2i(0, 0), vec2i(m_Width - 1, 0), { 255, 0, 0 });
+//	DrawLine(vec2i(m_Width - 1, 0), vec2i(m_Width - 1, m_Height - 1), { 255, 0, 0 });
+//
+//	// Time
+//	m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
+//	m_CurrentTimeMS = clock();
+//
+//	//std::cout << 1 / m_DeltaTime << std::endl;
+//}
+
 void Renderer::Draw(Model& model)
 {
 	mat4 projMatrix = (*m_Camera).GetProjMatrix();
