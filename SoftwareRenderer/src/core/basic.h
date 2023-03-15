@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include <windows.h>
 
 inline float clamp(float t, float minVal, float maxVal)
 {

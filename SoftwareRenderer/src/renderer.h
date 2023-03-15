@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <utility>
+#include <functional>
 #include <time.h>
 
 #include "core/core.h"
@@ -21,6 +23,7 @@ private:
 
 	vec3 FindBarycentric(const vec3& ab, const vec3& ac, const vec3& pa);
 	void DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color);
+	void DrawTriangle(v2f i1, v2f i2, v2f i3, ColorRGB(*Frag)(v2f));
 
 	int            m_Width, m_Height;
 	unsigned char* m_FrameBuffer;

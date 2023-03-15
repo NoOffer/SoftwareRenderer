@@ -50,8 +50,9 @@ void ObjParser::Parse(const char* filepath, std::vector<Model*>& models)
 				int a, b, c;
 				iss >> a >> b >> c;
 				indices.push_back(a);
-				indices.push_back(b);
+				// Change from CW to CCW
 				indices.push_back(c);
+				indices.push_back(b);
 				idxCount += 3;
 				//std::cout << "f " << a << " " << b << " " << c << std::endl;
 			}

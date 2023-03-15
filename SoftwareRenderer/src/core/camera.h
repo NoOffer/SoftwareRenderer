@@ -26,6 +26,7 @@ public:
 	{
 	}
 
+	inline vec3 GetPosition() { return m_Position; }
 	inline void SetPosition(vec3 pos) { m_Position = pos; m_ViewMatrixAvailable = false; }
 	inline void Translate(vec3 v) { m_Position = m_Position + v; m_ViewMatrixAvailable = false; }
 

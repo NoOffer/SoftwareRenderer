@@ -48,7 +48,7 @@ int main()
 		window.DispatchMsg();
 		window.Draw(renderer.GetFrameBuffer());
 
-		cam.SetPosition(vec3(std::cos(t) * 10.0f, 1.0f, std::sin(t) * 10.0f));
-		t += 0.005f;
+		cam.SetPosition(vec3(std::cos(t) * 12.0f, 2.0f, std::sin(t) * 12.0f));
+		t += 0.01f;
 	}
 }

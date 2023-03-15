@@ -1,7 +1,5 @@
 ﻿#include "Renderer.h"
 
-#include <iostream>
-
 Renderer::Renderer(int width, int height, Camera* cam) : m_Width(width), m_Height(height), m_Camera(cam), m_DeltaTime(0)
 {
 	m_FrameBuffer = (unsigned char*)malloc(sizeof(unsigned char) * width * height * 3);
@@ -65,24 +63,24 @@ void Renderer::ClearBuffer()
 
 void Renderer::Draw(Model& model)
 {
-	mat4 projMatrix = (*m_Camera).GetProjMatrix();
-	mat4 viewMatrix = (*m_Camera).GetViewMatrix();
+	BlinnPhongShader::SetViewMatrix((*m_Camera).GetViewMatrix());
+	BlinnPhongShader::SetProjMatrix((*m_Camera).GetProjMatrix());
+	BlinnPhongShader::SetLightPos(vec3(0.0f, 5.0f, 0.0f));
+	BlinnPhongShader::SetCamPos((*m_Camera).GetPosition());
 
 	VertexBuffer& vb = model.GetVertexBuffer();
 	IndexBuffer& ib = model.GetIndexBuffer();
 
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		//DrawTriangle(
-		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i]], 1.0f))).xyz(),
-		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f))).xyz(),
-		//	(*m_Camera).Project(mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f))).xyz(),
-		//	{ 240, 240, 255 });
-
-		vec4 a = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i]], 1.0f)));
-		vec4 b = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 1]], 1.0f)));
-		vec4 c = mul(projMatrix, mul(viewMatrix, vec4(vb[ib[i + 2]], 1.0f)));
-		DrawTriangle((a / std::abs(a.w)).xyz(), (b / std::abs(b.w)).xyz(), (c / std::abs(c.w)).xyz(), { 240, 240, 255 });
+		a2v o1 = { vec4(vb[ib[i]], 1.0f) };
+		a2v o2 = { vec4(vb[ib[i + 1]], 1.0f) };
+		a2v o3 = { vec4(vb[ib[i + 2]], 1.0f) };
+		DrawTriangle(
+			BlinnPhongShader::Vert(o1),
+			BlinnPhongShader::Vert(o2),
+			BlinnPhongShader::Vert(o3),
+			BlinnPhongShader::Frag);
 	}
 
 	DrawLine(vec2i(0, 0), vec2i(m_Width - 1, 0), { 255, 0, 0 });
@@ -200,6 +198,64 @@ void Renderer::DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color)
 				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
 				{
 					m_ZBuffer[idx] = p.z;
+
+					idx *= 3;
+					m_FrameBuffer[idx] = (unsigned char)(255 * p.z * 5);
+					m_FrameBuffer[idx + 1] = (unsigned char)(255 * p.z * 5);
+					m_FrameBuffer[idx + 2] = (unsigned char)(255 * p.z * 5);
+					//m_FrameBuffer[idx] = color.r;
+					//m_FrameBuffer[idx + 1] = color.g;
+					//m_FrameBuffer[idx + 2] = color.b;
+				}
+			}
+		}
+	}
+}
+
+void Renderer::DrawTriangle(v2f i1, v2f i2, v2f i3, ColorRGB(*Frag)(v2f))
+{
+	vec3 a = i1.vertexCS.xyz();
+	vec3 b = i2.vertexCS.xyz();
+	vec3 c = i3.vertexCS.xyz();
+	vec3 ab = b - a;
+	vec3 ac = c - a;
+
+	//if (cross(ab, ac))
+
+	vec2i bboxmin(0, 0);
+	vec2i bboxmax(m_Width - 1, m_Height - 1);
+
+	bboxmin.x = clamp(min(a.x, min(b.x, c.x)), 0, bboxmax.x);
+	bboxmin.y = clamp(min(a.y, min(b.y, c.y)), 0, bboxmax.y);
+
+	bboxmax.x = clamp(max(a.x, max(b.x, c.x)), 0, bboxmax.x);
+	bboxmax.y = clamp(max(a.y, max(b.y, c.y)), 0, bboxmax.y);
+
+	vec3 p;
+
+	vec3 normalWS = normalize(cross((i3.vertexWS - i1.vertexWS).xyz(), (i2.vertexWS - i1.vertexWS).xyz()));
+
+	for (p.x = bboxmin.x; p.x <= bboxmax.x; p.x++)
+	{
+		for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
+		{
+			vec3 barycentric = FindBarycentric(ab, ac, a - p);
+
+			//std::cout << p << std::endl;
+			//std::cout << barycentric << std::endl;
+			//if (barycentric.x + barycentric.y <= 1)
+			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))  // Check if a pixel is in the triangle
+			{
+				int idx = (p.y * m_Width + p.x);
+				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;
+				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
+				{
+					m_ZBuffer[idx] = p.z;
+
+					v2f i;
+					i.normalWS = normalWS;
+					i.vertexWS = i1.vertexWS * barycentric.x + i2.vertexWS * barycentric.y + i3.vertexWS * barycentric.z;
+					ColorRGB color = Frag(i);
 
 					idx *= 3;
 					m_FrameBuffer[idx] = color.r;
