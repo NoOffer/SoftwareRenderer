@@ -6,7 +6,7 @@ Renderer::Renderer(int width, int height, Camera* cam) : m_Width(width), m_Heigh
 	if (m_FrameBuffer) memset(m_FrameBuffer, 0, sizeof(unsigned char) * width * height * 3);
 
 	m_ZBuffer = (float*)malloc(sizeof(float) * width * height);
-	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 2.0f;
+	if (m_ZBuffer) for (int i = 0; i < width * height; i++) m_ZBuffer[i] = 1.0f;
 
 	m_CurrentTimeMS = clock();
 }
@@ -20,7 +20,7 @@ Renderer::~Renderer()
 void Renderer::ClearBuffer()
 {
 	memset(m_FrameBuffer, 0, sizeof(unsigned char) * m_Width * m_Height * 3);
-	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 2.0f;
+	for (int i = 0; i < m_Width * m_Height; i++) m_ZBuffer[i] = 1.0f;
 }
 
 //void Renderer::Draw(Model& model)
@@ -164,61 +164,60 @@ vec3 Renderer::FindBarycentric(const vec3& ab, const vec3& ac, const vec3& pa)
 	return vec3(1.0f - (u.x + u.y) / u.z, u.x / u.z, u.y / u.z);
 }
 
-void Renderer::DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color)
-{
-	vec3 ab = b - a;
-	vec3 ac = c - a;
-
-	//if (cross(ab, ac))
-
-	vec2i bboxmin(0, 0);
-	vec2i bboxmax(m_Width - 1, m_Height - 1);
-
-	bboxmin.x = clamp(min(a.x, min(b.x, c.x)), 0, bboxmax.x);
-	bboxmin.y = clamp(min(a.y, min(b.y, c.y)), 0, bboxmax.y);
-
-	bboxmax.x = clamp(max(a.x, max(b.x, c.x)), 0, bboxmax.x);
-	bboxmax.y = clamp(max(a.y, max(b.y, c.y)), 0, bboxmax.y);
-
-	vec3 p;
-
-	for (p.x = bboxmin.x; p.x <= bboxmax.x; p.x++)
-	{
-		for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
-		{
-			vec3 barycentric = FindBarycentric(ab, ac, a - p);
-
-			//std::cout << p << std::endl;
-			//std::cout << barycentric << std::endl;
-			//if (barycentric.x + barycentric.y <= 1)
-			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))
-			{
-				int idx = (p.y * m_Width + p.x);
-				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;
-				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
-				{
-					m_ZBuffer[idx] = p.z;
-
-					idx *= 3;
-					m_FrameBuffer[idx] = (unsigned char)(255 * p.z * 5);
-					m_FrameBuffer[idx + 1] = (unsigned char)(255 * p.z * 5);
-					m_FrameBuffer[idx + 2] = (unsigned char)(255 * p.z * 5);
-					//m_FrameBuffer[idx] = color.r;
-					//m_FrameBuffer[idx + 1] = color.g;
-					//m_FrameBuffer[idx + 2] = color.b;
-				}
-			}
-		}
-	}
-}
+/* Caution:: Wrong Interpolation */
+//void Renderer::DrawTriangle(vec3 a, vec3 b, vec3 c, const ColorRGB& color)
+//{
+//	vec3 ab = b - a;
+//	vec3 ac = c - a;
+//
+//	//if (cross(ab, ac))
+//
+//	vec2i bboxmin(0, 0);
+//	vec2i bboxmax(m_Width - 1, m_Height - 1);
+//
+//	bboxmin.x = clamp(min(a.x, min(b.x, c.x)), 0, bboxmax.x);
+//	bboxmin.y = clamp(min(a.y, min(b.y, c.y)), 0, bboxmax.y);
+//
+//	bboxmax.x = clamp(max(a.x, max(b.x, c.x)), 0, bboxmax.x);
+//	bboxmax.y = clamp(max(a.y, max(b.y, c.y)), 0, bboxmax.y);
+//
+//	vec3 p;
+//
+//	for (p.x = bboxmin.x; p.x <= bboxmax.x; p.x++)
+//	{
+//		for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
+//		{
+//			vec3 barycentric = FindBarycentric(ab, ac, a - p);
+//
+//			//std::cout << p << std::endl;
+//			//std::cout << barycentric << std::endl;
+//			//if (barycentric.x + barycentric.y <= 1)
+//			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))
+//			{
+//				int idx = (p.y * m_Width + p.x);
+//				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;
+//				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
+//				{
+//					m_ZBuffer[idx] = p.z;
+//
+//					idx *= 3;
+//					m_FrameBuffer[idx] = (unsigned char)(255 * p.z * 5);
+//					m_FrameBuffer[idx + 1] = (unsigned char)(255 * p.z * 5);
+//					m_FrameBuffer[idx + 2] = (unsigned char)(255 * p.z * 5);
+//					//m_FrameBuffer[idx] = color.r;
+//					//m_FrameBuffer[idx + 1] = color.g;
+//					//m_FrameBuffer[idx + 2] = color.b;
+//				}
+//			}
+//		}
+//	}
+//}
 
 void Renderer::DrawTriangle(v2f i1, v2f i2, v2f i3, ColorRGB(*Frag)(v2f))
 {
-	vec3 a = i1.vertexCS.xyz();
-	vec3 b = i2.vertexCS.xyz();
-	vec3 c = i3.vertexCS.xyz();
-	vec3 ab = b - a;
-	vec3 ac = c - a;
+	vec4 a = i1.vertexCS;
+	vec4 b = i2.vertexCS;
+	vec4 c = i3.vertexCS;
 
 	//if (cross(ab, ac))
 
@@ -231,38 +230,61 @@ void Renderer::DrawTriangle(v2f i1, v2f i2, v2f i3, ColorRGB(*Frag)(v2f))
 	bboxmax.x = clamp(max(a.x, max(b.x, c.x)), 0, bboxmax.x);
 	bboxmax.y = clamp(max(a.y, max(b.y, c.y)), 0, bboxmax.y);
 
-	vec3 p;
-
+	/* Pre-calculated attribute(s) */
 	vec3 normalWS = normalize(cross((i3.vertexWS - i1.vertexWS).xyz(), (i2.vertexWS - i1.vertexWS).xyz()));
 
-	for (p.x = bboxmin.x; p.x <= bboxmax.x; p.x++)
-	{
-		for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
-		{
-			vec3 barycentric = FindBarycentric(ab, ac, a - p);
+	vec3 p;
+	float dxAB = a.y - b.y, dxBC = b.y - c.y, dxCA = c.y - a.y;
+	float dyAB = b.x - a.x, dyBC = c.x - b.x, dyCA = a.x - c.x;
+	float cAB = a.x * b.y - b.x * a.y, cBC = b.x * c.y - c.x * b.y, cCA = c.x * a.y - a.x * c.y;
 
-			//std::cout << p << std::endl;
-			//std::cout << barycentric << std::endl;
-			//if (barycentric.x + barycentric.y <= 1)
-			if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))  // Check if a pixel is in the triangle
+	float fTempAB = dxAB * bboxmin.x + dyAB * bboxmin.y + cAB;
+	float fTempBC = dxBC * bboxmin.x + dyBC * bboxmin.y + cBC;
+	float fTempCA = dxCA * bboxmin.x + dyCA * bboxmin.y + cCA;
+	for (p.y = bboxmin.y; p.y <= bboxmax.y; p.y++)
+	{
+		float fAB = fTempAB, fBC = fTempBC, fCA = fTempCA;
+		for (p.x = bboxmin.x; p.x <= bboxmax.x; p.x++)
+		{
+			//vec3 ab = b - a;
+			//vec3 ac = c - a;
+			//vec3 barycentric = FindBarycentric(ab, ac, a - p);
+
+			//if (!(barycentric.x < 0 || barycentric.y < 0 || barycentric.z < 0))  // Check if a pixel is in the triangle
+			if (!(fAB < 0 || fBC < 0 || fCA < 0))  // Check if a pixel is in the triangle
 			{
+				float s2 = fAB + fBC + fCA;
+				vec3 barycentric(fBC / s2, fCA / s2, fAB / s2);
+
+				//Interpolate p.z, valid in [1.0f, 0.5f]
+				//The value of p.z is actually 1/Z
+				float azFactor = barycentric.x / a.w, bzFactor = barycentric.y / b.w, czFactor = barycentric.z / c.w;
+				float rawW = azFactor + bzFactor + czFactor;
+				p.z = (azFactor * a.z + bzFactor * b.z + czFactor * c.z) / rawW;
+				//Log(p.z);
+
 				int idx = (p.y * m_Width + p.x);
-				p.z = a.z * barycentric.x + b.z * barycentric.y + c.z * barycentric.z;
-				if (p.z < m_ZBuffer[idx] && p.z > 0)  // Z test
+				if (p.z >= 0.0f && p.z < m_ZBuffer[idx])  // Z test
 				{
 					m_ZBuffer[idx] = p.z;
 
 					v2f i;
 					i.normalWS = normalWS;
-					i.vertexWS = i1.vertexWS * barycentric.x + i2.vertexWS * barycentric.y + i3.vertexWS * barycentric.z;
+					i.vertexWS = (azFactor * i1.vertexWS + bzFactor * i2.vertexWS + czFactor * i3.vertexWS) / rawW;
 					ColorRGB color = Frag(i);
 
 					idx *= 3;
+					//m_FrameBuffer[idx] = 255 * (1 / p.z - 1);
+					//m_FrameBuffer[idx + 1] = 255 * (1 / p.z - 1);
+					//m_FrameBuffer[idx + 2] = 255 * (1 / p.z - 1);
 					m_FrameBuffer[idx] = color.r;
 					m_FrameBuffer[idx + 1] = color.g;
 					m_FrameBuffer[idx + 2] = color.b;
 				}
 			}
+			fAB += dxAB; fBC += dxBC; fCA += dxCA;
 		}
+		fTempAB += dyAB; fTempBC += dyBC; fTempCA += dyCA;
 	}
+
 }

@@ -11,7 +11,7 @@ int main()
 {
 	// Create camera
 	Camera cam((int)WIDTH, (int)HEIGHT, 30, 100.0f, 0.1f);
-	cam.SetPosition(vec3(1.0f, 1.0f, -5.0f));
+	cam.SetPosition(vec3(0.0f, 2.0f, -15.0f));
 	// Create renderer
 	Renderer renderer(WIDTH, HEIGHT, &cam);
 
@@ -48,7 +48,7 @@ int main()
 		window.DispatchMsg();
 		window.Draw(renderer.GetFrameBuffer());
 
-		cam.SetPosition(vec3(std::cos(t) * 12.0f, 2.0f, std::sin(t) * 12.0f));
+		cam.SetPosition(vec3(std::cos(t) * 20.0f, 3.0f, std::sin(t) * 20.0f));
 		t += 0.01f;
 	}
 }

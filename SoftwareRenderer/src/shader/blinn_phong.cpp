@@ -10,6 +10,7 @@ v2f BlinnPhongShader::Vert(a2v i)
 	v2f o;
 	o.vertexWS = i.vertexOS;
 	o.vertexCS = mul(m_ProjMatrix, mul(m_ViewMatrix, i.vertexOS));
+	//o.vertexCS = o.vertexCS / std::abs(o.vertexCS.w);
 	o.vertexCS.x /= std::abs(o.vertexCS.w);
 	o.vertexCS.y /= std::abs(o.vertexCS.w);
 	return o;
@@ -26,6 +27,6 @@ ColorRGB BlinnPhongShader::Frag(v2f i)
 
 	float specular = max(0.0f, dot(i.normalWS, h));
 
-	return ColorRGB{ 255, 255, 255 } *i.vertexWS.xyz();
+	//return ColorRGB{ 255, 255, 255 } *i.vertexWS.xyz();
 	return ColorRGB{ 255, 255, 255 } *(specular + diffuse + 0.03f);
 }

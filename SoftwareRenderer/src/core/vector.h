@@ -347,3 +347,18 @@ inline std::ostream& operator<<(std::ostream& ostr, vec4 const& v)
 	ostr << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
 	return ostr;
 }
+
+inline vec2 operator*(float t, vec2 v)
+{
+	return vec2(v.x * t, v.y * t);
+}
+
+inline vec3 operator*(float t, vec3 v)
+{
+	return vec3(v.x * t, v.y * t, v.z * t);
+}
+
+inline vec4 operator*(float t, vec4 v)
+{
+	return vec4(v.x * t, v.y * t, v.z * t, v.w * t);
+}

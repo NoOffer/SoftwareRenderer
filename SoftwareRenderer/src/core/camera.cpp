@@ -51,12 +51,12 @@ mat4 Camera::GetProjMatrix()
 		m_ProjMatrix[1][1] = n;
 		m_ProjMatrix[1][2] = 0.5f * m_Resolution.y;
 
-		//// Tranditional, Z' valid in [-W', W']
-		//m_ProjMatrix[2][2] = m_Far / (m_Far - m_Near);
+		//// Tranditional, Z' valid in [W', 2W']
+		//m_ProjMatrix[2][2] = m_Far / (m_Far - m_Near) + 1.0f;
 		//m_ProjMatrix[2][3] = m_Far * m_Near / (m_Far - m_Near);
 		
 		// Experimental, Z' valid in [0, 1]
-		m_ProjMatrix[2][2] = 1 / (m_Far - m_Near);
+		m_ProjMatrix[2][2] = 1.0f / (m_Far - m_Near);
 		m_ProjMatrix[2][3] = m_Near / (m_Near - m_Far);
 
 		m_ProjMatrix[3][2] = 1.0f;
