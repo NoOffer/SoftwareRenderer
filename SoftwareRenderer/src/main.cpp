@@ -20,7 +20,8 @@ int main()
 	std::cout << "Window initialized." << std::endl;
 
 	std::vector<Model*> models;
-	ObjParser::Parse("res/test_model.obj", models);
+	ObjParser::Parse("res/test_cube_model.obj", models);
+	//ObjParser::Parse("res/test_sphere_model.obj", models);
 
 	Model testModel(
 		"Test Model",

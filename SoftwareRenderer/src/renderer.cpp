@@ -71,15 +71,18 @@ void Renderer::Draw(Model& model)
 	VertexBuffer& vb = model.GetVertexBuffer();
 	IndexBuffer& ib = model.GetIndexBuffer();
 
+	v2f* vOutBuffer = (v2f*)malloc(sizeof(v2f) * vb.GetCount());
+	for (int i = 0; i < vb.GetCount(); i++)
+	{
+		vOutBuffer[i] = BlinnPhongShader::Vert({ vec4(vb[i], 1.0f) });
+	}
+
 	for (int i = 0; i < ib.GetCount(); i += 3)
 	{
-		a2v o1 = { vec4(vb[ib[i]], 1.0f) };
-		a2v o2 = { vec4(vb[ib[i + 1]], 1.0f) };
-		a2v o3 = { vec4(vb[ib[i + 2]], 1.0f) };
 		DrawTriangle(
-			BlinnPhongShader::Vert(o1),
-			BlinnPhongShader::Vert(o2),
-			BlinnPhongShader::Vert(o3),
+			vOutBuffer[ib[i]],
+			vOutBuffer[ib[i + 1]],
+			vOutBuffer[ib[i + 2]],
 			BlinnPhongShader::Frag);
 	}
 
