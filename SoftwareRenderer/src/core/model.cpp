@@ -5,7 +5,4 @@ Model::Model(const char* name, int vertCount, vec3* vertices, int idxCount, int*
 {
 }
 
-Model::~Model()
-{
-	std::cout << "Model Deconstructed" << std::endl;
-}
+Model::~Model() {}
