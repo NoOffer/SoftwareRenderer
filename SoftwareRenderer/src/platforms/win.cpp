@@ -1,13 +1,9 @@
-#include "windows.h"
+#include "win.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
@@ -20,6 +16,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		EndPaint(hwnd, &ps);
 		return 0;
 	}
+
 	case WM_KEYDOWN:
 		switch (LOWORD(wParam))
 		{
@@ -28,6 +25,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 		return 0;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -35,7 +36,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_Height(height)
 {
 	// Register the window class.
-	const wchar_t CLASS_NAME[] = L"Sample Window Class";
+	const wchar_t* CLASS_NAME = L"Sample Window Class";
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
 	WNDCLASS wc = { };
@@ -63,6 +64,7 @@ Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_
 		NULL        // Additional application data
 	);
 
+	// Get device context
 	m_DC = CreateCompatibleDC(GetDC(m_Window));
 
 	// Setup DIB
@@ -78,12 +80,16 @@ Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_
 	LPVOID ptr;  // The pointer to the location of the DIB bit values
 	HBITMAP dib = CreateDIBSection(m_DC, (BITMAPINFO*)&bi, DIB_RGB_COLORS, &ptr, 0, 0);  // This is to obtain the pointer ptr
 	if (dib) SelectObject(m_DC, dib);
+
+	// Setup framebuffer
 	m_FrameBuffer = (unsigned char*)ptr;
 
-	//if (m_Window == NULL)
-	//{
-	//	return;
-	//}
+	if (m_Window == NULL)
+	{
+		return;
+	}
+
+	//SetupUI();
 
 	ShowWindow(m_Window, SW_NORMAL);
 
@@ -95,6 +101,10 @@ Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_
 
 Window::~Window()
 {
+	//for (HWND hwnd : m_UIElements)
+	//{
+	//	CloseWindow(hwnd);
+	//}
 	CloseWindow(m_Window);
 	DeleteDC(m_DC);
 }
@@ -134,3 +144,26 @@ void Window::DispatchMsg()
 		DispatchMessage(&msg);   // Dispatch message
 	}
 }
+
+//// UI setup
+//void Window::SetupUI()
+//{
+//	// Create FPS display
+//	m_UIElements.push_back(CreateWindow(
+//		L"Static",								// Window class
+//		L"FPS:",								// Window text
+//		WS_VISIBLE | WS_CHILD,  // Window style
+//		0, 0,									// Position
+//		50, 20,									// Size
+//		m_Window,								// Parent window    
+//		NULL,									// Menu
+//		NULL,									// Instance handle (no need as a child element)
+//		NULL									// Additional application data
+//	));
+//
+//	// Display UI
+//	for (HWND hwnd : m_UIElements)
+//	{
+//		ShowWindow(hwnd, SW_NORMAL);
+//	}
+//}

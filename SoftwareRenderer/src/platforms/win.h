@@ -5,6 +5,8 @@
 #endif 
 
 #include <windows.h>
+#include <vector>
+//#include <iostream>
 
 class Window
 {
@@ -21,6 +23,10 @@ private:
 	HDC            m_DC;
 	unsigned char* m_FrameBuffer;
 
+	//std::vector<HWND> m_UIElements;
+
 	int m_Width;
 	int m_Height;
+
+	//void SetupUI();
 };

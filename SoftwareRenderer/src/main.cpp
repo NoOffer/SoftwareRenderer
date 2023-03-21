@@ -2,7 +2,7 @@
 
 #include "core\core.h"
 #include "renderer.h"
-#include "platforms\windows.h"
+#include "platforms\win.h"
 
 const int WIDTH = 500;
 const int HEIGHT = 300;
