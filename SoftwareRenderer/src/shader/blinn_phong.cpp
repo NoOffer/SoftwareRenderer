@@ -25,8 +25,8 @@ ColorRGB BlinnPhongShader::Frag(v2f i)
 	vec3 viewDir = normalize(m_CamPosWS - i.vertexWS.xyz());
 	vec3 h = normalize(viewDir + lightDir);
 
-	float specular = std::pow(max(0.0f, dot(i.normalWS, h)), 5);
+	float specular = std::pow(max(0.0f, dot(i.normalWS, h)), 2);
 
 	//return ColorRGB{ 255, 255, 255 } *i.vertexWS.xyz();
-	return ColorRGB{ 255, 255, 255 } *(specular + diffuse + 0.03f);
+	return ColorRGB{ 255, 255, 255 } *(specular * 0.2f + diffuse * 0.6f + 0.2f);
 }
