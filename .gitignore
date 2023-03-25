@@ -1,4 +1,7 @@
 .vs/
 bin/
 bin-obj/
-SoftwareRenderer/SoftwareRenderer.*
+SoftwareRenderer/res/models
+SoftwareRenderer/SoftwareRenderer.filters
+SoftwareRenderer/SoftwareRenderer.user
+SoftwareRenderer/SoftwareRenderer.vcxproj.user
