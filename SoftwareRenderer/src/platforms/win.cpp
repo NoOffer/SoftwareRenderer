@@ -1,6 +1,8 @@
 #include "win.h"
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+std::unordered_map<UINT, KeyState> Window::m_KeyStates;
+
+LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -24,6 +26,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(0);
 			break;
 		}
+		Window::m_KeyStates[LOWORD(wParam)] = KeyState::Pressed;
+		return 0;
+
+	case WM_KEYUP:
+		Window::m_KeyStates[LOWORD(wParam)] = KeyState::Released;
 		return 0;
 
 	case WM_DESTROY:
@@ -41,7 +48,7 @@ Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_
 
 	WNDCLASS wc = { };
 
-	wc.lpfnWndProc = WindowProc;
+	wc.lpfnWndProc = Window::WindowProc;
 	wc.hInstance = hInstance;
 	wc.lpszClassName = CLASS_NAME;
 
@@ -93,6 +100,13 @@ Window::Window(int width, int height, const wchar_t* title) : m_Width(width), m_
 
 	ShowWindow(m_Window, SW_NORMAL);
 
+	m_KeyStates = { 
+		{KEY_SPACE, KeyState::Unpressed}, 
+		{KEY_W, KeyState::Unpressed}, 
+		{KEY_A, KeyState::Unpressed},
+		{KEY_S, KeyState::Unpressed},
+		{KEY_D, KeyState::Unpressed}
+	};
 	DispatchMsg();
 
 	// Initialize framebuffer
@@ -133,15 +147,28 @@ void Window::Draw(unsigned char const* framebuffer)
 
 void Window::DispatchMsg()
 {
+	for (std::pair<const UINT, KeyState>& p : m_KeyStates)
+	{
+		if (p.second == KeyState::Pressed)
+		{
+			p.second = KeyState::Repeated;
+		}
+		else if (p.second == KeyState::Released)
+		{
+			p.second = KeyState::Unpressed;
+		}
+	}
+
 	MSG msg;
 	while (1)
 	{
 		// Peek does not block, Get bloacks£¬PM_NOREMOVE instructs not to remove the message from the list
 		if (!PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) break;  // Break if there is no message
-		if (!GetMessage(&msg, NULL, 0, 0)) break;
-
-		TranslateMessage(&msg);  // Translate from virtual key value to keywords
-		DispatchMessage(&msg);   // Dispatch message
+		if (GetMessage(&msg, NULL, 0, 0))
+		{
+			TranslateMessage(&msg);  // Translate from virtual key value to keywords
+			DispatchMessage(&msg);   // Dispatch message
+		}
 	}
 }
 

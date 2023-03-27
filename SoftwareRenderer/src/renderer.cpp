@@ -90,7 +90,7 @@ void Renderer::Draw(Model& model)
 	DrawLine(vec2i(m_Width - 1, 0), vec2i(m_Width - 1, m_Height - 1), { 255, 0, 0 });
 
 	// Time
-	m_DeltaTime = (clock() - (float)m_CurrentTimeMS) / CLOCKS_PER_SEC;
+	m_DeltaTime = ((double)clock() - m_CurrentTimeMS) / CLOCKS_PER_SEC;
 	m_CurrentTimeMS = clock();
 
 	//std::cout << 1 / m_DeltaTime << std::endl;
