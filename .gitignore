@@ -4,4 +4,4 @@ bin-obj/
 SoftwareRenderer/res/models
 SoftwareRenderer/SoftwareRenderer.filters
 SoftwareRenderer/SoftwareRenderer.user
-SoftwareRenderer/SoftwareRenderer.vcxproj.user
+SoftwareRenderer/SoftwareRenderer.vcxproj.*
